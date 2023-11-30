@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 package com.miempresa.parqueaya_movil.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -26,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,6 +57,7 @@ fun ProfileScreen(navController: NavHostController) {
         content = { procontenido(navController) }
     )
 }
+@Preview
 @Composable
 fun Toolbarmenu(){
     TopAppBar(
@@ -142,6 +145,7 @@ fun procontenido(navController: NavController){
                         contentDescription = "notificacion",
                         modifier = Modifier
                             .size(56.dp)
+                            .clickable { navController.navigate("notificaciones") }
                             .padding(8.dp)
                     )
                 }
@@ -159,6 +163,7 @@ fun procontenido(navController: NavController){
                         contentDescription = "car",
                         modifier = Modifier
                             .size(56.dp)
+                            .clickable { navController.navigate("autos") }
                             .padding(8.dp)
                     )
                 }
@@ -176,6 +181,7 @@ fun procontenido(navController: NavController){
                         contentDescription = "qr",
                         modifier = Modifier
                             .size(56.dp)
+                            .clickable { navController.navigate("tickets") }
                             .padding(8.dp)
                     )
                 }
@@ -223,4 +229,5 @@ fun procontenido(navController: NavController){
             }
         }
     }}
+
 }

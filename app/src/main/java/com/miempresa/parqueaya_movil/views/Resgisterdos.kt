@@ -225,60 +225,13 @@ fun Regcontenidodo(navController: NavController) {
                     )
                 }
             )
-            val opciones= listOf("DNI","Pasaporte")
-            var expanded by remember { mutableStateOf(false) }
-            var selectedOptionText by remember { mutableStateOf(opciones[0]) }
-            val backgroundColor = Color(0xFF7D96F3)
-            val textColor = Color.White
-            val cornerRadius = 30.dp
-            ExposedDropdownMenuBox(expanded = expanded, onExpandedChange ={expanded = !expanded},
-                modifier= Modifier
-                    .padding(start=28.dp, end=120.dp))
-            {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(cornerRadius))
-                        .height(60.dp),
-                    readOnly = false,
-
-                    value = selectedOptionText,
-                    onValueChange = { },
-                    textStyle = TextStyle(color = textColor),
-                    label = { Text(text = "") },
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { expanded = !expanded },
-                            modifier = Modifier.padding(end = 8.dp) // Espaciado del ícono
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowDropDown,
-                                contentDescription = null, // Descripción opcional
-                                tint = textColor // Establece el color del ícono
-                            )
-                        }
-                    },
-                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                        containerColor = backgroundColor
-                    ),
-                )
-                ExposedDropdownMenu(expanded = expanded,
-                    onDismissRequest = { expanded=false},
-                    modifier = Modifier
-                        .background(color = backgroundColor)
-                        .width(120.dp)
-                        .padding(start = 8.dp)
-                )
-                {
-                    opciones.forEach{
-                        DropdownMenuItem(text = { Text(it, color = Color(0x80FFFFFF)) },
-                            onClick = { selectedOptionText=it
-                                expanded=false
-                            },
-                            contentPadding= ExposedDropdownMenuDefaults.ItemContentPadding,)
-                    }
-                }
-            }
+            Text(
+                text = "DNI",
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 30.dp)
+            )
             var dni by remember { mutableStateOf("") }
             TextField(
                 value = dni,

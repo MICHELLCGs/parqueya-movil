@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.miempresa.parqueaya_movil.views
 
@@ -59,14 +61,14 @@ fun LoginScreen(navController: NavController){
 fun Logcontenido(navController: NavController){
     // Definición de pinceles de gradiente
     val gradient= Brush.linearGradient(
-        0.0f to Color(0xFF13143E),
-        500.0f to Color(0xFF0E116A),
+        0.0f to Color(0xFF141639),
+        500.0f to Color(0xFF0F126A),
         start= Offset.Zero,
         end= Offset.Infinite
     )
     val gradientbut= Brush.linearGradient(
         0.0f to Color(0xFF6180EC),
-        500.0f to Color(0xFF9BAFFD),
+        500.0f to Color(0xFF9CB0FE),
         start= Offset.Zero,
         end= Offset.Infinite
     )
@@ -204,7 +206,6 @@ fun Logcontenido(navController: NavController){
                     )
                     }
                 )
-
                 Row(verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
