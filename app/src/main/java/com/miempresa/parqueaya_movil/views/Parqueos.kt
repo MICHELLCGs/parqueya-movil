@@ -1,11 +1,9 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.miempresa.parqueaya_movil.views
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,18 +18,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.R
@@ -39,27 +42,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AutosScreen(navController: NavController) {
+fun ParqueosScreen(navController: NavController){
+    val viewModel: ParqueoViewModel = viewModel()
     Scaffold(
-        topBar = { Toolbarauto(navController) },
-        content = {Autocontenido(navController)}
+        topBar = { ToolbarParqueo(navController) },
+        content = {Parqueocontenido(navController,  viewModel)}
     )
+
 }
 @Composable
-fun Toolbarauto(navController: NavController) {
+fun ToolbarParqueo(navController: NavController) {
+
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
@@ -88,7 +92,7 @@ fun Toolbarauto(navController: NavController) {
     )
 }
 @Composable
-fun Autocontenido(navController: NavController) {
+fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
     val gradient = Brush.linearGradient(
         0.0f to Color(0xFF13143E),
         500.0f to Color(0xFF0E116A),
@@ -98,6 +102,12 @@ fun Autocontenido(navController: NavController) {
     val gradientcaja= Brush.linearGradient(
         0.0f to Color(0xFF6180EC),
         500.0f to Color(0xFF9BAFFD),
+        start= Offset.Zero,
+        end= Offset.Infinite
+    )
+    val gradientpar= Brush.linearGradient(
+        0.0f to Color(0xFF6180EC),
+        500.0f to Color(0xFFD3DAFA),
         start= Offset.Zero,
         end= Offset.Infinite
     )
@@ -128,15 +138,15 @@ fun Autocontenido(navController: NavController) {
                     .clickable(onClick = { /* Acción al hacer clic en el icono de carro */ })
             ) {
                 Image(
-                    painter = painterResource(id = com.miempresa.parqueaya_movil.R.drawable.car),
-                    contentDescription = "car",
+                    painter = painterResource(id = com.miempresa.parqueaya_movil.R.drawable.baseline_car),
+                    contentDescription = "parqueo",
                     modifier = Modifier
                         .size(112.dp)
                         .padding(12.dp)
                         .height(40.dp)
                 )
             }
-            Text(text = "Mis autos", color = Color(0xFFFFFFFF),
+            Text(text = "Parqueos", color = Color(0xFFFFFFFF),
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -149,34 +159,49 @@ fun Autocontenido(navController: NavController) {
                     .border(1.dp, Color(0xFF6E89EF))
             ){
                 Row(){
-                Text(text="Autos", color=Color(0xFF15196C), fontSize = 15.sp, fontWeight = FontWeight.Bold,
-                    modifier=Modifier
-                        .padding(start=10.dp, top=4.dp))
-                    Text(text="1", color=Color(0xFF15196C), fontSize = 15.sp,fontWeight = FontWeight.Bold,
+                    Text(text="Lista", color=Color(0xFF15196C), fontSize = 15.sp, fontWeight = FontWeight.Bold,
                         modifier=Modifier
-                            .padding(start=4.dp, top=4.dp))
-            }
+                            .padding(start=10.dp, top=4.dp))
+                    Text(text="Mapa", color=Color(0xFF15196C), fontSize = 15.sp,fontWeight = FontWeight.Bold,
+                        modifier=Modifier
+                            .padding(start=110.dp, top=4.dp)
+                            .clickable { navController.navigate("mapa") })
+                }
             }
         }
 
 //        Spacer(modifier = Modifier.height(1.dp)
 //            .background(gradientcaja))
-
-        Box(
+        LaunchedEffect(key1 = true) {
+            viewModel.obtenerTodosLosParqueos()
+        }
+        val listaDeParqueos by viewModel.listaDeParqueos.collectAsState()
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(600.dp)
                 .background(Color.White)
         ) {
-            Text(
-                text = "Hola",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxSize()
-                    .background(White),
-                color = Color.White
-            )
+            items(listaDeParqueos) { parqueo ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(brush = gradientpar)
+                        .clickable { /* Acción al hacer clic en un parqueo */ }
+                        .border(1.dp, Color.Transparent),
+                ) {
+                    Text(
+                        text = "ID: ${parqueo.id} - Nombre: ${parqueo.nombre} - Ubicación: ${parqueo.ubicacion}",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(12.dp)
 
+                    )
+                }
+            }
         }
     }
 }}

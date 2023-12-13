@@ -32,6 +32,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,14 +52,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.miempresa.parqueaya_movil.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen(navController: NavHostController , emailText: String, password: String) {
     Scaffold (
         topBar = { Toolbarmenu()},
-        content = { procontenido(navController) }
+        content = { procontenido(navController,  emailText, password) }
     )
 }
 @Preview
@@ -76,13 +84,26 @@ fun Toolbarmenu(){
     )
 }
 @Composable
-fun procontenido(navController: NavController){
+fun procontenido(navController: NavController,  emailText: String, password: String){
+    var nombre by remember { mutableStateOf("") }
+    var monto by remember { mutableStateOf(0) }
+    val db = FirebaseFirestore.getInstance()
+    val auth = Firebase.auth
     val gradient= Brush.linearGradient(
         0.0f to Color(0xFF13143E),
         500.0f to Color(0xFF0E116A),
         start= Offset.Zero,
         end=Offset.Infinite
     )
+    LaunchedEffect(Unit) {
+        val userDoc = db.collection("usuarios").document(auth.currentUser!!.uid)
+        userDoc.addSnapshotListener { snapshot, _ ->
+            if (snapshot != null && snapshot.exists()) {
+                nombre = snapshot.getString("nombre") ?: ""
+            }
+        }
+    }
+
     val gradientbut= Brush.linearGradient(
         0.0f to Color(0xFF6180EC),
         500.0f to Color(0xFF9BAFFD),
@@ -124,7 +145,7 @@ fun procontenido(navController: NavController){
                 Text(text = "Hola, ",
                     color = Color(0x80FFFFFF),
                     fontSize = 20.sp)
-                Text(text = "Usuario",
+                Text(text = "$nombre",
                     color = Color.White,
                     fontSize = 20.sp)
             }
@@ -163,7 +184,7 @@ fun procontenido(navController: NavController){
                         contentDescription = "car",
                         modifier = Modifier
                             .size(56.dp)
-                            .clickable { navController.navigate("autos") }
+                            .clickable { navController.navigate("parqueo") }
                             .padding(8.dp)
                     )
                 }
@@ -194,7 +215,7 @@ fun procontenido(navController: NavController){
                     .border(2.dp, Color(0xFF6180EC), RectangleShape)
                     .background(Color(0x80232675))
             ){
-                Text(text = "S/. Variable",
+                Text(text = "$monto",
                     textAlign = TextAlign.Center,
                     color= Color.White,
                     modifier=Modifier)
@@ -211,7 +232,7 @@ fun procontenido(navController: NavController){
                 colors = ButtonDefaults.buttonColors(Color.Transparent),
                 modifier= Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp, start = 25.dp, end = 25.dp)
+                    .padding(top = 30.dp, start = 25.dp, end = 25.dp,bottom=25.dp)
                     .height(50.dp)
                     .background(
                         brush = gradientbut,

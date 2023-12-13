@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -44,12 +45,12 @@ import androidx.navigation.NavController
 @Composable
 fun NotiScreen(navController: NavController){
     Scaffold(
-        topBar = { Toolbarnoti() },
+        topBar = { Toolbarnoti(navController) },
         content = {Noticontenido(navController)}
     )
 }
 @Composable
-fun Toolbarnoti() {
+fun Toolbarnoti(navController: NavController) {
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
@@ -62,12 +63,13 @@ fun Toolbarnoti() {
                     contentDescription = stringResource(id = R.string.navigation_menu),
                     tint = Color.White,
 
+
                     modifier = Modifier
                         .size(60.dp)
-                        .clickable { }
+                        .clickable { navController.popBackStack() }
                 )
                 Text(
-                    text = "Atras",
+                    text = "Atrás",
                     color = Color.White,
                     fontSize = 30.sp,
                     modifier = Modifier.padding(start = 8.dp)
@@ -92,12 +94,12 @@ fun Noticontenido(navController: NavController){
         end= Offset.Infinite
     )
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(gradient)
             .padding(top = 65.dp)
-    ) {
+    ) {item{
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -164,9 +166,9 @@ fun Noticontenido(navController: NavController){
                     .padding(16.dp)
                     .fillMaxSize()
                     .background(Color.White),
-                color = Color.White
+                color=Color(0xFF15196C)
             )
 
         }
     }
-}
+}}

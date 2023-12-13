@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.miempresa.parqueaya_movil.views
 
@@ -44,12 +44,12 @@ import androidx.navigation.NavController
 @Composable
 fun TicketsScreen(navController: NavController){
     Scaffold(
-        topBar = { ToolbarTicket() },
+        topBar = { ToolbarTicket(navController) },
         content = {Ticketcontenido(navController)}
     )
 }
 @Composable
-fun ToolbarTicket() {
+fun ToolbarTicket(navController: NavController) {
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon = {
@@ -64,10 +64,10 @@ fun ToolbarTicket() {
 
                     modifier = Modifier
                         .size(60.dp)
-                        .clickable { }
+                        .clickable { navController.popBackStack() }
                 )
                 Text(
-                    text = "Atras",
+                    text = "Atrás",
                     color = Color.White,
                     fontSize = 30.sp,
                     modifier = Modifier.padding(start = 8.dp)
@@ -119,7 +119,7 @@ fun Ticketcontenido(navController: NavController){
             ) {
                 Image(
                     painter = painterResource(id = com.miempresa.parqueaya_movil.R.drawable.qr),
-                    contentDescription = "car",
+                    contentDescription = "qr",
                     modifier = Modifier
                         .size(112.dp)
                         .padding(12.dp)

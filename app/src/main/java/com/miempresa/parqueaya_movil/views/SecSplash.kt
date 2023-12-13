@@ -29,6 +29,7 @@ fun SplashScreen(navController: NavController){
     }
     Splash()
 }
+
 @Composable
 fun Splash(){
     Column(

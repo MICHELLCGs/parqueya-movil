@@ -62,6 +62,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RegisterScreendos(navController: NavHostController) {
@@ -260,7 +261,7 @@ fun Regcontenidodo(navController: NavController) {
                     .padding(4.dp),
                 label = {
                     Text(
-                        "Ingrese su documento de identidad",
+                        "Ingrese su DNI",
                         color = Color(0x80FFFFFF)
                     )
                 }

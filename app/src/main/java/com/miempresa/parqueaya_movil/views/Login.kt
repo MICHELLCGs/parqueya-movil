@@ -1,13 +1,13 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.miempresa.parqueaya_movil.views
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -39,12 +40,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.miempresa.parqueaya_movil.R
 
 // Pantalla de inicio de sesión
@@ -52,14 +58,20 @@ import com.miempresa.parqueaya_movil.R
 @Composable
 fun LoginScreen(navController: NavController){
     // Estructura de la pantalla usando Scaffold
+
     Scaffold(
         content = { Logcontenido(navController) }
     )
 }
 // Contenido de la pantalla de inicio de sesión
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Logcontenido(navController: NavController){
     // Definición de pinceles de gradiente
+    var password by remember { mutableStateOf("") }
+    var emailText by remember { mutableStateOf("") }
+    val auth = Firebase.auth
+    val contexto = LocalContext.current
     val gradient= Brush.linearGradient(
         0.0f to Color(0xFF141639),
         500.0f to Color(0xFF0F126A),
@@ -139,7 +151,7 @@ fun Logcontenido(navController: NavController){
                     modifier= Modifier
                         .padding(top = 20.dp)
                 )
-                var emailText by remember { mutableStateOf("") }
+
                 TextField(
                     value = emailText,
                     onValueChange = {emailText=it},
@@ -176,7 +188,7 @@ fun Logcontenido(navController: NavController){
                     modifier= Modifier
                         .padding(top = 20.dp)
                 )
-                var password by remember { mutableStateOf("") }
+
                 TextField(
                     value = password,
                     onValueChange = {password=it},
@@ -204,7 +216,8 @@ fun Logcontenido(navController: NavController){
                     label = { Text("Contraseña",
                         color = Color(0x80FFFFFF)
                     )
-                    }
+                    },
+                    visualTransformation = PasswordVisualTransformation()
                 )
                 Row(verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -238,7 +251,26 @@ fun Logcontenido(navController: NavController){
                             .padding(top = 1.dp)
                     )
                 }
-                Button(onClick = {navController.navigate("register")},
+                Button(
+                    onClick = {
+                        if (emailText.isEmpty() || password.isEmpty()) {
+                            Toast.makeText(contexto, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                        } else {
+                            try {
+                                auth.signInWithEmailAndPassword(emailText, password)
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            Toast.makeText(contexto, "Iniciando…", Toast.LENGTH_SHORT).show()
+                                            navController.navigate("profile/$emailText/$password")
+                                        } else {
+                                            Toast.makeText(contexto, "No registrado", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                            } catch (e: Exception) {
+                                Toast.makeText(contexto, "Error al iniciar sesión: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
                     modifier= Modifier
                         .fillMaxWidth()
@@ -271,14 +303,15 @@ fun Logcontenido(navController: NavController){
                             color = Color(0xFF93A0BD),
                             fontSize = 16.sp,
                             modifier= Modifier
-                                .padding(top = 30.dp)
+                                .padding(top = 30.dp, bottom=30.dp)
                         )
                         Text(text = "Regístrate.",
                             color = Color(0xFFFFFFFF),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             modifier= Modifier
-                                .padding(top = 30.dp))
+                                .padding(top = 30.dp, bottom=30.dp)
+                                .clickable {navController.navigate("register")})
                     }
                 }
             }
