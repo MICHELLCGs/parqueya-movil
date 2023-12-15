@@ -11,32 +11,36 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ParqueoViewModel : ViewModel() {
+    // Estado mutable para mensajes de la vista
     private val _mensaje = MutableStateFlow("")
 
-    private val _listaDeParqueos = MutableStateFlow<List<Parqueo>>(emptyList()) // Cambio aquí
-    val listaDeParqueos: StateFlow<List<Parqueo>> = _listaDeParqueos // Cambio aquí
+    // Estado mutable para almacenar la lista de parqueos
+    private val _listaDeParqueos = MutableStateFlow<List<Parqueo>>(emptyList())
+    val listaDeParqueos: StateFlow<List<Parqueo>> = _listaDeParqueos
 
+    // Configuración de Retrofit para manejar las solicitudes a la API
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://api.parqueaya.xyz/v1/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    // Instancia del servicio de Parqueo utilizando Retrofit
     private val parqueoService = retrofit.create(ParqueoService::class.java)
 
-    // Función para obtener todos los parqueos
+    // Función para obtener todos los parqueos desde el servicio
     fun obtenerTodosLosParqueos() {
         viewModelScope.launch {
-            _mensaje.value = "Obteniendo todos los parqueos"
+            _mensaje.value = "Obteniendo todos los parqueos" // Actualización del mensaje para la vista
             try {
-                val response = parqueoService.obtenerParqueos()
+                val response = parqueoService.obtenerParqueos() // Petición al servicio para obtener parqueos
                 if (response.isNotEmpty()) {
                     _listaDeParqueos.value = response // Actualiza la lista de parqueos en el ViewModel
-                    _mensaje.value = "Se obtuvieron ${response.size} parqueos"
+                    _mensaje.value = "Se obtuvieron ${response.size} parqueos" // Mensaje de éxito con la cantidad de parqueos obtenidos
                 } else {
-                    _mensaje.value = "No se encontraron parqueos"
+                    _mensaje.value = "No se encontraron parqueos" // Mensaje si no se encuentran parqueos
                 }
             } catch (e: Exception) {
-                _mensaje.value = "Error en la conexión: ${e.message}"
+                _mensaje.value = "Error en la conexión: ${e.message}" // Mensaje en caso de error de conexión
             }
         }
     }

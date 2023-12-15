@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -21,6 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,6 +37,12 @@ fun PagoDialog(
     show: Boolean,
     onClose: () -> Unit
 ){
+    val gradientbut= Brush.linearGradient(
+        0.0f to Color(0xFF112466),
+        500.0f to Color(0xFF536BC9),
+        start= Offset.Zero,
+        end= Offset.Infinite
+    )
     var tarifa by remember { mutableStateOf(0) }
     var numtarjeta by remember { mutableStateOf("") }
     if(show){
@@ -56,10 +66,24 @@ fun PagoDialog(
 
                 Row (modifier=Modifier
                     .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-                    Button(onClick = onClose ) {
+                    Button(onClick = onClose,
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        modifier= Modifier
+
+                            .background(
+                                brush = gradientbut,
+                                shape = RoundedCornerShape(10.dp)
+                            )) {
                         Text(text = "Cancelar")
                     }
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        modifier= Modifier
+
+                            .background(
+                                brush = gradientbut,
+                                shape = RoundedCornerShape(10.dp)
+                            )) {
                         Text(text = "Pagar")
                     }
                 }

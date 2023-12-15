@@ -40,11 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -99,7 +101,7 @@ fun Mapacontenido(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(640.dp) // Altura del mapa
+                    .height(810.dp) // Altura del mapa
             ) {
                 GoogleMap(
                     modifier = Modifier
@@ -109,7 +111,14 @@ fun Mapacontenido(navController: NavController) {
                     state= MarkerState(position=location),
                     title="Parqueo Mall Aventura Arequipa",
                     snippet="Av. Porongoche 500, Arequipa 04001"
-                )}
+                )
+                    Marker(
+                        state = rememberMarkerState(position = LatLng(-16.398874, -71.535383)),
+                        title = "Parqueo Plaza de Armas",
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+                    )
+
+                }
             }
         }
     }

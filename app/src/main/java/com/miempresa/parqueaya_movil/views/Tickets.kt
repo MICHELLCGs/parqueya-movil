@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +28,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.R
@@ -38,16 +44,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TicketsScreen(navController: NavController){
+    val viewModel: ParqueoViewModel = viewModel()
     Scaffold(
         topBar = { ToolbarTicket(navController) },
-        content = {Ticketcontenido(navController)}
+        content = {Ticketcontenido(navController,viewModel)}
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToolbarTicket(navController: NavController) {
     TopAppBar(
@@ -78,7 +87,7 @@ fun ToolbarTicket(navController: NavController) {
     )
 }
 @Composable
-fun Ticketcontenido(navController: NavController){
+fun Ticketcontenido(navController: NavController, viewModel: ParqueoViewModel){
     val gradient = Brush.linearGradient(
         0.0f to Color(0xFF13143E),
         500.0f to Color(0xFF0E116A),
@@ -91,7 +100,12 @@ fun Ticketcontenido(navController: NavController){
         start= Offset.Zero,
         end= Offset.Infinite
     )
-
+    val gradientpar= Brush.linearGradient(
+        0.0f to Color(0xFF6180EC),
+        500.0f to Color(0xFFD3DAFA),
+        start= Offset.Zero,
+        end= Offset.Infinite
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -126,7 +140,7 @@ fun Ticketcontenido(navController: NavController){
                         .height(40.dp)
                 )
             }
-            Text(text = "Mis tickets", color = Color(0xFFFFFFFF),
+            Text(text = "Tarifas", color = Color(0xFFFFFFFF),
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -152,20 +166,37 @@ fun Ticketcontenido(navController: NavController){
 //        Spacer(modifier = Modifier.height(1.dp)
 //            .background(gradientcaja))
 
-        Box(
+        LaunchedEffect(key1 = true) {
+            viewModel.obtenerTodosLosParqueos()
+        }
+        val listaDeParqueos by viewModel.listaDeParqueos.collectAsState()
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(600.dp)
                 .background(Color.White)
         ) {
-            Text(
-                text = "Hola",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxSize()
-                    .background(Color.White),
-                color = Color.White
-            )
+            items(listaDeParqueos) { parqueo ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(brush = gradientpar)
+                        .clickable { /* Acción al hacer clic en un parqueo */ }
+                        .border(1.dp, Color.Transparent),
+                ) {
+                    Text(
+                        text = "${parqueo.nombre}: ${parqueo.tarifa_hora} por hora con una capacidad de ${parqueo.capacidad}",
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(12.dp)
+
+                    )
+                }
+            }
+
 
         }
     }

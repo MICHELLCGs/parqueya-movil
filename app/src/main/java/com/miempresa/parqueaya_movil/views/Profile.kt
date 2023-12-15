@@ -260,7 +260,7 @@ fun procontenido(navController: NavController,  emailText: String, password: Str
 
         }
         PagoDialog(show = showPagoDialog,
-            onClose = { showPagoDialog = false })
+                onClose = { showPagoDialog = false })
     }}
 
 

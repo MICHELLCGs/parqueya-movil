@@ -60,7 +60,6 @@ fun ParqueosScreen(navController: NavController){
         topBar = { ToolbarParqueo(navController) },
         content = {Parqueocontenido(navController,  viewModel)}
     )
-
 }
 @Composable
 fun ToolbarParqueo(navController: NavController) {
@@ -113,12 +112,12 @@ fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
         end= Offset.Infinite
     )
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(gradient)
             .padding(top = 65.dp)
-    ) {item{
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -205,6 +204,6 @@ fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
                 }
             }
 
-        }
+
     }
 }}
