@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +45,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,28 +58,29 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.miempresa.parqueaya_movil.R
+import com.miempresa.parqueaya_movil.components.PagoDialog
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(navController: NavHostController , emailText: String, password: String) {
     Scaffold (
-        topBar = { Toolbarmenu()},
+        topBar = { Toolbarmenu(navController)},
         content = { procontenido(navController,  emailText, password) }
     )
 }
-@Preview
 @Composable
-fun Toolbarmenu(){
+fun Toolbarmenu(navController: NavController){
     TopAppBar(
         title = { Text(text = "") },
         navigationIcon={
             Icon(
-                imageVector = Icons.Filled.Menu,
+                imageVector = Icons.Filled.Settings,
                 contentDescription = stringResource(id = androidx.compose.ui.R.string.navigation_menu),
                 tint = Color.White,
                 modifier = Modifier
-                    .size(60.dp)
-                    .clickable { /* Handle navigation click */ }
+                    .padding(10.dp)
+                    .size(40.dp)
+                    .clickable { navController.navigate("edit")}
             )
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color(0xFF131440))
@@ -95,6 +98,10 @@ fun procontenido(navController: NavController,  emailText: String, password: Str
         start= Offset.Zero,
         end=Offset.Infinite
     )
+    var showPagoDialog by remember{
+        mutableStateOf(false)
+    }
+    val context=LocalContext.current
     LaunchedEffect(Unit) {
         val userDoc = db.collection("usuarios").document(auth.currentUser!!.uid)
         userDoc.addSnapshotListener { snapshot, _ ->
@@ -228,11 +235,13 @@ fun procontenido(navController: NavController,  emailText: String, password: Str
                     .border(2.dp, Color(0xFF6180EC), RectangleShape)
                     .background(Color(0x1A232675))
             )
-            Button(onClick = {},
+            Button(onClick = {
+                             showPagoDialog=true
+            },
                 colors = ButtonDefaults.buttonColors(Color.Transparent),
                 modifier= Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp, start = 25.dp, end = 25.dp,bottom=25.dp)
+                    .padding(top = 30.dp, start = 25.dp, end = 25.dp, bottom = 25.dp)
                     .height(50.dp)
                     .background(
                         brush = gradientbut,
@@ -248,7 +257,11 @@ fun procontenido(navController: NavController,  emailText: String, password: Str
                         .padding(top = 1.dp)
                 )
             }
+
         }
+        PagoDialog(show = showPagoDialog,
+            onClose = { showPagoDialog = false })
     }}
+
 
 }

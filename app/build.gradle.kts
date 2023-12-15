@@ -71,7 +71,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     // Import the BoM for the Firebase platform
     implementation (platform("com.google.firebase:firebase-bom:32.3.1"))
-
+    implementation("com.google.maps.android:maps-compose:2.7.2")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     // Declare the dependencies for the desired Firebase products without specifying versions
     // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
     implementation ("com.google.firebase:firebase-auth")

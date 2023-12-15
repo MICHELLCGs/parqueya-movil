@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.miempresa.parqueaya_movil.components.PagoDialog
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -152,8 +153,9 @@ fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
                 modifier = Modifier
                     .padding(top=150.dp, start=40.dp))
             Box(
-                modifier=Modifier.fillMaxWidth()
-                    .padding(top=220.dp)
+                modifier= Modifier
+                    .fillMaxWidth()
+                    .padding(top = 220.dp)
                     .size(90.dp)
                     .background(gradientcaja)
                     .border(1.dp, Color(0xFF6E89EF))
@@ -163,8 +165,8 @@ fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
                         modifier=Modifier
                             .padding(start=10.dp, top=4.dp))
                     Text(text="Mapa", color=Color(0xFF15196C), fontSize = 15.sp,fontWeight = FontWeight.Bold,
-                        modifier=Modifier
-                            .padding(start=110.dp, top=4.dp)
+                        modifier= Modifier
+                            .padding(start = 110.dp, top = 4.dp)
                             .clickable { navController.navigate("mapa") })
                 }
             }
@@ -202,6 +204,7 @@ fun Parqueocontenido(navController: NavController, viewModel: ParqueoViewModel){
                     )
                 }
             }
+
         }
     }
 }}

@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+)
 
 package com.miempresa.parqueaya_movil.views
 
@@ -58,7 +60,6 @@ import com.miempresa.parqueaya_movil.R
 @Composable
 fun LoginScreen(navController: NavController){
     // Estructura de la pantalla usando Scaffold
-
     Scaffold(
         content = { Logcontenido(navController) }
     )

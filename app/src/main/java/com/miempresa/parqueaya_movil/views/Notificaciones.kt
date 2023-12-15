@@ -161,7 +161,7 @@ fun Noticontenido(navController: NavController){
                 .background(Color.White)
         ) {
             Text(
-                text = "Hola",
+                text = "",
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxSize()

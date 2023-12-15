@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.miempresa.parqueaya_movil.views.AutosScreen
+import com.miempresa.parqueaya_movil.views.EditScreen
 import com.miempresa.parqueaya_movil.views.LoginScreen
 import com.miempresa.parqueaya_movil.views.MapaScreen
 import com.miempresa.parqueaya_movil.views.NotiScreen
@@ -75,6 +76,9 @@ fun nav(){
         }
         composable(route="mapa"){
             MapaScreen(navController)
+        }
+        composable(route="edit"){
+            EditScreen(navController)
         }
     }
 }
