@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "183957476205",
+    "project_id": "parqueaya-movil",
+    "storage_bucket": "parqueaya-movil.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183957476205:android:e498c1139ab320ab2c4064",
+        "android_client_info": {
+          "package_name": "com.miempresa.parqueaya_movil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHre7ZInbxnNYdRxYjOQyIhgpWc9m758w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
